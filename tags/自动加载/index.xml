@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Liangliangtoo&#39;s Blog</title>
-    <link>https://LucienVen.github.io/</link>
-    <description>Recent content on Liangliangtoo&#39;s Blog</description>
+    <title>自动加载 on Liangliangtoo&#39;s Blog</title>
+    <link>https://LucienVen.github.io/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/</link>
+    <description>Recent content in 自动加载 on Liangliangtoo&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 05 Jan 2019 17:59:59 +0800</lastBuildDate>
     
-	<atom:link href="https://LucienVen.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://LucienVen.github.io/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -20,15 +20,6 @@
       <description>&lt;p&gt;自动加载是现代php框架的基石，让php摆脱了“原始社会”的调用模式（笑&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://LucienVen.github.io/about/</link>
-      <pubDate>Sat, 05 Jan 2019 15:44:54 +0800</pubDate>
-      
-      <guid>https://LucienVen.github.io/about/</guid>
-      <description>About Me Name: liangliang.too Age: 24 Education: Undergraduate target article: php opcache pipe 管道 / 中间件 container 容器 slim 框架基础使用 python 图床脚本，https://sm.ms/doc/ 代码实现 文章编写</description>
     </item>
     
   </channel>

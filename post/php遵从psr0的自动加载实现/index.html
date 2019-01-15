@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Php遵从psr0的自动加载实现 // Liangliangtoo&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="PHP 遵从 PSR-0 的自动加载实现">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.38" />
+
+  <meta property="og:title" content="Php遵从psr0的自动加载实现" />
+<meta property="og:description" content="PHP 遵从 PSR-0 的自动加载实现" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://LucienVen.github.io/post/php%E9%81%B5%E4%BB%8Epsr0%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="https://LucienVen.github.io//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Liangliangtoo&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/my-categories.css">
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+
+    <h1 class="brand-title">liangliang.too</h1>
+    <h2 class="brand-tagline">Talk is cheap, show me your codes.</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://LucienVen.github.io/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/post">Blog</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/about">about</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/LucienVen" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/shift8creative" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#require-include">require / include</a></li>
+<li><a href="#什么是自动加载">什么是自动加载</a></li>
+<li><a href="#使用-autoload实现自动加载">使用__autoload实现自动加载</a></li>
+<li><a href="#命名空间">命名空间</a></li>
+<li><a href="#psr-0-与-psr-4">PSR-0 与 PSR-4</a>
+<ul>
+<li><a href="#psr-0-自动加载规范-已弃用">PSR-0 自动加载规范（已弃用）</a></li>
+</ul></li>
+<li><a href="#使用spl-autoload-register-实现自动加载">使用spl_autoload_register()实现自动加载</a></li>
+<li><a href="#遵从psr-0的自动加载简单实现">遵从PSR-0的自动加载简单实现</a></li>
+<li><a href="#使用composer自动加载">使用composer自动加载</a></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/post/php%E9%81%B5%E4%BB%8Epsr0%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0/">Php遵从psr0的自动加载实现</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>5</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2019</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-php" href="https://LucienVen.github.io//categories/php">PHP</a>
+				
+					<a class="post-category post-category-%E5%8E%9F%E7%90%86" href="https://LucienVen.github.io//categories/%E5%8E%9F%E7%90%86">原理</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            <p>自动加载是现代php框架的基石，让php摆脱了“原始社会”的调用模式（笑</p>
+
+<p></p>
+
+<blockquote>
+<p>我在php的学习路径上只经过简单的语法学习和最基本的记事本练习后，比较粗暴地进入了框架的学习中，框架确实提供了很多很便捷的实现，例如数据库ORM，自动加载；</p>
+
+<p>一个很日常的例子，use一个命名空间类，然后实例化，调用方法，就可以实现我想要的操作，但是问题在于，为什么可以这样呢？我深感受限于基础。</p>
+
+<p>而且在我之后的php路途上，我发现一些很有意思的更为“modern”框架，如slim，号称一个下午可以阅读完源码的一个微框架，确实很有意思，但是我在最开头的部分就看不懂了。很惭愧。所以我准备从头来过。</p>
+</blockquote>
+
+<h3 id="require-include">require / include</h3>
+
+<p>在较早的代码中，requrie / include 这两个函数会经常出现。</p>
+
+<p>假设在<code>Bar.php</code>中需要使用到<code>Foo.php</code>中某功能，则需要在<code>Bar.php</code>中引入Foo.php,</p>
+
+<pre><code class="language-php">// Foo.php
+class Foo
+{
+    public function printIn()
+    {
+        echo 'className: ' . __CLASS__;
+    }
+}
+
+// Bar.php
+require 'Foo.php';
+$foo = new Foo;
+$foo-&gt;printIn();
+</code></pre>
+
+<p>输出结果：</p>
+
+<pre><code>className: Foo
+</code></pre>
+
+<p>如果在<code>Bar.php</code>中引入不存在的<code>Bim.php</code>，则会报一个致命错误，</p>
+
+<pre><code class="language-php">// Bar.php
+require 'Foo.php';
+require 'Bim.php';
+$foo = new Foo;
+$foo-&gt;printIn();
+
+// 输出
+PHP Fatal error:  require(): Failed opening required 'Bim.php'
+    
+// 若使用 include
+// Bar.php
+require 'Foo.php';
+include 'Bim.php';
+$foo = new Foo;
+$foo-&gt;printIn();
+
+    
+// 输出，报一个Warning
+Warning: include(): Failed opening 'Bim.php' for inclusion (include_path='.;C:\php\pear') in D:\Visual-NMP-x64\www\Default\Autoloader\Bar.php on line 4
+
+className: Foo // 代码继续执行，$foo-&gt;printIn()输出成功
+</code></pre>
+
+<p>由上我们可以看到，<strong>如果使用require，若引入失败，程序报error，代码会终止执行；而使用include，若引入失败，程序报warning，代码会继续执行</strong></p>
+
+<p>当我们的php代码较为简单的时候（比如练手写个留言板），这样一个个文件require / include 当然是没有问题的，但是代码量上去了，项目结构变得复杂的时候，人力维护这样的引入就会显得十分困难，而且十分容易出错。</p>
+
+<h3 id="什么是自动加载">什么是自动加载</h3>
+
+<p>在php manual中，<a href="http://php.net/manual/zh/language.oop5.autoload.php">类的自动加载</a>章节中有这样的描述：</p>
+
+<blockquote>
+<p>在编写面向对象（OOP） 程序时，很多开发者为每个类新建一个 PHP 文件。 这会带来一个烦恼：每个脚本的开头，都需要包含（include）一个长长的列表（每个类都有个文件）。</p>
+
+<p>在 PHP 5 中，已经不再需要这样了。 <a href="http://php.net/manual/zh/function.spl-autoload-register.php">spl_autoload_register()</a> 函数可以注册任意数量的自动加载器，当使用尚未被定义的类（class）和接口（interface）时自动去加载。通过注册自动加载器，脚本引擎在 PHP 出错失败前有了最后一个机会加载所需的类。</p>
+
+<p>尽管 <a href="http://php.net/manual/zh/function.autoload.php">__autoload()</a> 函数也能自动加载类和接口，但更建议使用 <a href="http://php.net/manual/zh/function.spl-autoload-register.php">spl_autoload_register()</a> 函数。<a href="http://php.net/manual/zh/function.spl-autoload-register.php">spl_autoload_register()</a> 提供了一种更加灵活的方式来实现类的自动加载（同一个应用中，可以支持任意数量的加载器，比如第三方库中的）。因此，不再建议使用 <a href="http://php.net/manual/zh/function.autoload.php">__autoload()</a> 函数，在以后的版本中它可能被弃用。</p>
+</blockquote>
+
+<p><strong>在我个人的理解中，自动加载就是在开发者对类或者接口进行调用的时候，能提供自动引入的功能，而不需要开发者人力把文件一个个引入需要的文件中，从而完成对需要的类或者接口的调用。</strong></p>
+
+<p>又上面引用的段落，我们知道php 提供两个函数可以完成自动载入功能。下面我们来先看__autoload的实现。</p>
+
+<h3 id="使用-autoload实现自动加载">使用__autoload实现自动加载</h3>
+
+<blockquote>
+<p>在php manual中 __autoload魔术方法的定义：__autoload 尝试加载未定义的类</p>
+
+<p>void __autoload ( string <code>$class</code> )</p>
+</blockquote>
+
+<p>手册上写着，可以通过定义这个函数来启用<a href="http://php.net/manual/zh/language.oop5.autoload.php">类的自动加载</a>。</p>
+
+<p>我们还是先来看一下这个方法。</p>
+
+<pre><code class="language-php">// Bar.php
+$foo = new Foo; 
+</code></pre>
+
+<p>直接运行Bar.php，就会报一个error错误。</p>
+
+<p>使用__autoload，加载<code>Foo.php</code>，不过我们先来看看这个函数的参数$class代表什么意思</p>
+
+<pre><code>// Bar.php
+function __autoload($className)
+{
+    echo $className;
+    exit;
+}
+
+$foo = new Foo();
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-php">Foo% // emmmmm 目前还不知道为什么后面会出现这个%符号
+</code></pre>
+
+<p>可见，这个参数$className，就是自动获取到的需要加载的&rdquo;类的名称&rdquo;。这样，简单修改一下<code>__autoload</code>，我们就能让函数自动引入需要的类了。</p>
+
+<pre><code class="language-php">// Foo.php
+class Foo
+{
+    public function printIn()
+    {
+        echo 'className: ' . __class__;
+    }
+}
+
+// Bar.php
+function __autoload($className)
+{
+    require './' . $className . '.php';
+}
+
+$foo = new Foo();
+$foo-&gt;printIn();
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-php">className: Foo
+</code></pre>
+
+<p>不过就是简单的引入一个文件可能并不能看出这个__autoload函数的作用，我们来引入多几个类看看。</p>
+
+<pre><code class="language-php">// Foo.php
+class Foo
+{
+    public function printIn()
+    {
+        echo 'className: ' . __class__ . PHP_EOL;
+    }
+}
+
+/* Bim.php, Cook.php, 均与Foo.php相似代码 */
+
+// Bar.php
+function __autoload($className)
+{
+    require './' . $className . '.php';
+}
+
+$foo = new Foo();
+$bim = new Bim();
+$cook = new Cook();
+
+$foo-&gt;printIn();
+$bim-&gt;printIn();
+$cook-&gt;printIn();
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-php">className: Foo
+className: Bim
+className: Cook
+</code></pre>
+
+<p>由上可见，__autoload函数实现的自动加载，可以自动获取需要的引入的类名，在其内部使用一个requeire或者其他相似功能的方法，就可以实现多个类的引入。</p>
+
+<blockquote>
+<p><strong>该方法在PHP 7.2.0 中已被弃用。</strong></p>
+
+<p><strong>This feature has been <em>DEPRECATED</em> as of PHP 7.2.0. Relying on this feature is highly discouraged.</strong></p>
+</blockquote>
+
+<h3 id="命名空间">命名空间</h3>
+
+<h3 id="psr-0-与-psr-4">PSR-0 与 PSR-4</h3>
+
+<p>PSR 是 PHP Standard Recommendations 的简写，由 <a href="https://github.com/php-fig">PHP FIG</a> 组织制定的 PHP 规范，是 PHP 开发的实践标准。</p>
+
+<blockquote>
+<p><a href="https://laravel-china.org/index.php/docs/psr">PSR 标准规范中文版</a>，可以在laravel-china社区中搜索到。<strong>里面的描述更加仔细，本文此段只是简单引述</strong>。</p>
+</blockquote>
+
+<p>这里我们来简单引述一下 PSR-0 与 PSR-4。</p>
+
+<h4 id="psr-0-自动加载规范-已弃用">PSR-0 自动加载规范（已弃用）</h4>
+
+<p>PSR-4规范是PSR-0的升级版本，<strong>是改进的自动加载规范</strong>。</p>
+
+<h3 id="使用spl-autoload-register-实现自动加载">使用spl_autoload_register()实现自动加载</h3>
+
+<h3 id="遵从psr-0的自动加载简单实现">遵从PSR-0的自动加载简单实现</h3>
+
+<h3 id="使用composer自动加载">使用composer自动加载</h3>
+
+<h3 id="总结">总结</h3>
+
+<p>引用</p>
+
+<ul>
+<li></li>
+</ul>
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-php" href="https://LucienVen.github.io//tags/php">PHP</a>,
+	                
+	                <a class="post-tag post-tag-%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD" href="https://LucienVen.github.io//tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD">自动加载</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/about/">About</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2019. All rights reserved.</p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

@@ -6,10 +6,20 @@
     <description>Recent content on Liangliangtoo&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Jan 2019 17:59:59 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 15 Jan 2019 15:07:35 +0800</lastBuildDate>
     
 	<atom:link href="https://LucienVen.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python实现上传图床脚本</title>
+      <link>https://LucienVen.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/</link>
+      <pubDate>Tue, 15 Jan 2019 15:07:35 +0800</pubDate>
+      
+      <guid>https://LucienVen.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://sm.ms/&#34;&gt;SM.MS&lt;/a&gt; 是由 V2EX大佬 @&lt;a href=&#34;https://www.v2ex.com/member/Showfom&#34;&gt;Showfom&lt;/a&gt; 自建的，无外链限制，无流量限制的公共图床，而且带有很简洁的API文档。在写markdown文档的时候，插入图片确实是一件我觉得挺麻烦的事情，所以，自己就简单实现了这样一个简单的小脚本，目的是&lt;strong&gt;在上传图片到图床时候，直接返回图片服务器地址&lt;/strong&gt;，然后我们把地址复制到markdown的图片语法的地址栏上就可以在别处访问了。
+&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Php遵从psr0的自动加载实现</title>
@@ -28,7 +38,7 @@
       <pubDate>Sat, 05 Jan 2019 15:44:54 +0800</pubDate>
       
       <guid>https://LucienVen.github.io/about/</guid>
-      <description>About Me Name: liangliang.too Age: 24 Education: Undergraduate target article: php opcache pipe 管道 / 中间件 container 容器 slim 框架基础使用 python 图床脚本，https://sm.ms/doc/ 代码实现 文章编写</description>
+      <description>ABOUT ME 基本信息 Name liangliang.too Age 24 Education 大学本科 Phone 136****1685 Email1 liangliang.too@gmail.com Email2 354409101@qq.com Address 广州黄埔 工作经验 广东臻创科技 2017.05 - 2017.09 研发部 php后台工程师(实习) 项目 广州外语通 2018.08 - 2019.01 技术研发部 p</description>
     </item>
     
   </channel>

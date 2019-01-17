@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Hugo基本使用 // Liangliangtoo&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="hugo基本使用(记录)">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.38" />
+
+  <meta property="og:title" content="Hugo基本使用" />
+<meta property="og:description" content="hugo基本使用(记录)" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://LucienVen.github.io/post/hugo%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="https://LucienVen.github.io//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Liangliangtoo&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+
+    <h1 class="brand-title">liangliang.too</h1>
+    <h2 class="brand-tagline">如果，这位旅客失去了梦想...</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://LucienVen.github.io/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/post">Blog</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/about">about</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/LucienVen" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/shift8creative" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#关于hugo调试">关于hugo调试</a></li>
+<li><a href="#文章格式设置">文章格式设置</a></li>
+<li><a href="#关于文章内容">关于文章内容</a></li>
+<li><a href="#查看内容">查看内容</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/post/hugo%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">Hugo基本使用</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>17</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2019</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-hugo" href="https://LucienVen.github.io//categories/hugo">hugo</a>
+				
+					<a class="post-category post-category-%E8%AE%B0%E5%BD%95" href="https://LucienVen.github.io//categories/%E8%AE%B0%E5%BD%95">记录</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            <p>hugo基本使用记录，以免自己忘记了（笑</p>
+
+<p></p>
+
+<p>本站使用的hugo主题是<a href="http://www.gohugo.org/theme/redlounge/"><strong>hugo-redlounge</strong></a>，原因是可配置程度稍高，能设置更多的个人信息，现阶段而言这个主题比较适合我。但是我最喜欢的主题应该是<a href="http://www.gohugo.org/theme/angels-ladder/"><strong>Angel’s Ladder</strong></a>，Blog是记录内容的地方，而这个主题十分简约，我很喜欢。</p>
+
+<p>另外，hugo-redlounge的表格和引用样式实在太蠢了hhhhh</p>
+
+<h3 id="关于hugo调试">关于hugo调试</h3>
+
+<pre><code class="language-php">$ hugo server --theme=hugo-redlounge --buildDrafts
+</code></pre>
+
+<p>开始调试模式，可以在浏览器输入<code>localhost:1313</code>，查看页面变化</p>
+
+<pre><code class="language-php">$ hugo --theme=hugo-redlounge --baseUrl=&quot;https://lucienven.github.io/&quot;
+</code></pre>
+
+<p>编译网站内容，并把静态页面输出到/public目录下，然后我们可以通过<strong>git操作</strong>把/public目录下的全部内容上传到github，然后我们就可以通过上面命令中的baseUrl访问了。</p>
+
+<h3 id="文章格式设置">文章格式设置</h3>
+
+<h3 id="关于文章内容">关于文章内容</h3>
+
+<table>
+<thead>
+<tr>
+<th align="left">Key</th>
+<th align="right">Remark</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">draft</td>
+<td align="right">是否编译（true: 不再编译 / false: 编译）</td>
+</tr>
+
+<tr>
+<td align="left">Tags</td>
+<td align="right">标签</td>
+</tr>
+
+<tr>
+<td align="left">Description</td>
+<td align="right">页面描述（Html titile）</td>
+</tr>
+
+<tr>
+<td align="left">Categories</td>
+<td align="right">分类</td>
+</tr>
+
+<tr>
+<td align="left">&lt; !&ndash;more&ndash;&gt;</td>
+<td align="right">在more前面的内容，会被当做文章摘要；若无改设置，则自动获取文章前80字符作为摘要。</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="查看内容">查看内容</h3>
+
+<ul>
+<li>查看标签Tags
+
+<ul>
+<li>地址栏后面添加 <strong>/tags</strong></li>
+<li><code>eg: https://lucienven.github.io/tags/</code></li>
+</ul></li>
+<li>查看分类Categories
+
+<ul>
+<li>地址栏后面添加 <strong>/categories</strong></li>
+<li><code>eg: https://lucienven.github.io/categories/</code></li>
+</ul></li>
+</ul>
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-hugo" href="https://LucienVen.github.io//tags/hugo">HUGO</a>,
+	                
+	                <a class="post-tag post-tag-%E8%AE%B0%E5%BD%95" href="https://LucienVen.github.io//tags/%E8%AE%B0%E5%BD%95">记录</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/">Python实现上传图床脚本</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2019. All rights reserved.</p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

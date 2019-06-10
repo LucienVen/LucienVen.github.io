@@ -20,7 +20,7 @@
 <meta property="og:description" content="使用python实现图片上传(SM.MS)免费图床脚本" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="https://LucienVen.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/" />
+<meta property="og:url" content="https://lucienven.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/" />
 
 
   
@@ -32,7 +32,7 @@
   
   
 
-  <link rel="stylesheet" href="https://LucienVen.github.io//css/redlounge.css">
+  <link rel="stylesheet" href="https://lucienven.github.io//css/redlounge.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
   <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
@@ -76,7 +76,7 @@
 
     <nav class="nav">
       <ul class="nav-list">
-        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://LucienVen.github.io/">Home</a></li>
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://lucienven.github.io/">Home</a></li>
         
           <li class="nav-item"><span class="nav-item-separator">//</span><a href="/post">Blog</a></li>
         
@@ -122,9 +122,22 @@
 <ul>
 <li><a href="#思路综述">思路综述</a></li>
 <li><a href="#sm-ms-api接口">SM.MS API接口</a></li>
-<li><a href="#使用requests模块库完成请求操作">使用requests模块库完成请求操作</a></li>
-<li><a href="#完善-命令行参数与文件存在判断">完善：命令行参数与文件存在判断</a></li>
+<li><a href="#使用requests模块库完成请求操作">使用Requests模块库完成请求操作</a></li>
+<li><a href="#完善-命令行参数与文件存在判断">完善：命令行参数与文件存在判断</a>
+<ul>
+<li><a href="#命令行参数sys-argv">命令行参数sys.argv</a></li>
+<li><a href="#文件存在判断os-path-exists">文件存在判断os.path.exists</a></li>
+<li><a href="#python-json字符串处理">python json字符串处理</a></li>
+</ul></li>
 <li><a href="#添加alisa至zsh-全局使用脚本">添加alisa至zsh，全局使用脚本</a></li>
+<li><a href="#拓展">拓展</a>
+<ul>
+<li><a href="#http请求头相关">http请求头相关</a></li>
+</ul></li>
+<li><a href="#总结">总结</a>
+<ul>
+<li><a href="#资料链接">资料链接</a></li>
+</ul></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -152,9 +165,9 @@
 			
 				<div class="post-categories">
 				
-					<a class="post-category post-category-python" href="https://LucienVen.github.io//categories/python">python</a>
+					<a class="post-category post-category-python" href="https://lucienven.github.io//categories/python">python</a>
 				
-					<a class="post-category post-category-%E8%84%9A%E6%9C%AC" href="https://LucienVen.github.io//categories/%E8%84%9A%E6%9C%AC">脚本</a>
+					<a class="post-category post-category-%E8%84%9A%E6%9C%AC" href="https://lucienven.github.io//categories/%E8%84%9A%E6%9C%AC">脚本</a>
 				
 				</div>
 			
@@ -241,9 +254,9 @@
 
 <p><img src="https://i.loli.net/2019/01/16/5c3ed00beb091.png" alt="test_relook" /></p>
 
-<h3 id="使用requests模块库完成请求操作">使用requests模块库完成请求操作</h3>
+<h3 id="使用requests模块库完成请求操作">使用Requests模块库完成请求操作</h3>
 
-<p>requests模块库使用十分简单，而且<a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html">文档</a>十分友好（笑。</p>
+<p>Requests模块库使用十分简单，而且<a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html">文档</a>十分友好（笑。</p>
 
 <p><img src="https://i.loli.net/2019/01/16/5c3ed3a89fbfa.png" alt="test_requests" /></p>
 
@@ -251,9 +264,56 @@
 
 <p>但是我们这里需要的是通过POST请求，上传图片啊！对于这样的需求我们查看文档，上面我们知道官方示例中请求头有一个设置是：<code>Content-Type: multipart/form-data;</code>，故我们在requesets中也是找寻相关文件内容上传的文档。</p>
 
+<p>根据文档，我们可以<strong>显式地设置文件名，文件类型和请求头</strong>：</p>
+
+<pre><code class="language-python">files = {'smfile': open(path, 'rb')}
+</code></pre>
+
+<p>上述代码，我们设置<strong>请求参数名为smfile</strong>，<strong>文件名为path</strong>，</p>
+
 <h3 id="完善-命令行参数与文件存在判断">完善：命令行参数与文件存在判断</h3>
 
+<h4 id="命令行参数sys-argv">命令行参数sys.argv</h4>
+
+<h4 id="文件存在判断os-path-exists">文件存在判断os.path.exists</h4>
+
+<h4 id="python-json字符串处理">python json字符串处理</h4>
+
 <h3 id="添加alisa至zsh-全局使用脚本">添加alisa至zsh，全局使用脚本</h3>
+
+<p>这步挺简单的，个人使用的是zsh，就是添加一行 alias 到 .zshrc ，</p>
+
+<pre><code class="language-python">alias graphbed='python3 /Users/taozz/Dropbox/projectCode/tools/graph_bed_use_smms.py'
+</code></pre>
+
+<p>以后，在终端输入 <strong>graphed [ photo_url ]</strong> 即可使用该脚本上传图片至图床，并把图片url返回打印，复制使用即可。</p>
+
+<h3 id="拓展">拓展</h3>
+
+<h4 id="http请求头相关">http请求头相关</h4>
+
+<h3 id="总结">总结</h3>
+
+<p>上述内容，只是很简单地进行一个脚本编写思路的记录，</p>
+
+<ol>
+<li>为什么要写这个脚本（目标与适用范围）</li>
+<li>用什么写（文档准备）</li>
+<li>怎么写（基础实现的编写与每一步的测试）</li>
+<li>如何完善（方便使用与基本判断）</li>
+</ol>
+
+<p>对我而言，就是一个知识回顾总结的过程。在其中回顾学习了一些常见操作，如sys.argv, os, json.loads等。</p>
+
+<p>这是我写的第一个关于python的文章，确实很简单，在我眼中python就是这样一门语言，<strong>“想做什么，去做什么”</strong>，对于我个人，喜欢这门语言，但是目前的情况，我的水平还不足够担当这门语言的工作，所以写点小脚本自己玩玩呗！coding is funny, especially with python.</p>
+
+<h4 id="资料链接">资料链接</h4>
+
+<ul>
+<li><a href="https://sm.ms/doc/">SM.MS API文档</a></li>
+<li><a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html#">Requests文档 快速上手(基本操作)</a></li>
+<li><a href="http://docs.python-requests.org/zh_CN/latest/user/quickstart.html#post-multipart-encoded">Requests文档 POST一个多部分编码(Multipart-Encoded)的文件</a></li>
+</ul>
 	
 			
 
@@ -261,11 +321,11 @@
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-python" href="https://LucienVen.github.io//tags/python">python</a>,
+	                <a class="post-tag post-tag-python" href="https://lucienven.github.io//tags/python">python</a>,
 	                
-	                <a class="post-tag post-tag-%E5%B7%A5%E5%85%B7" href="https://LucienVen.github.io//tags/%E5%B7%A5%E5%85%B7">工具</a>,
+	                <a class="post-tag post-tag-%E5%B7%A5%E5%85%B7" href="https://lucienven.github.io//tags/%E5%B7%A5%E5%85%B7">工具</a>,
 	                
-	                <a class="post-tag post-tag-%E5%B0%8F%E8%84%9A%E6%9C%AC" href="https://LucienVen.github.io//tags/%E5%B0%8F%E8%84%9A%E6%9C%AC">小脚本</a>,
+	                <a class="post-tag post-tag-%E5%B0%8F%E8%84%9A%E6%9C%AC" href="https://lucienven.github.io//tags/%E5%B0%8F%E8%84%9A%E6%9C%AC">小脚本</a>,
 	                
 				</div>
 			

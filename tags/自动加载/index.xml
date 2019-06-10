@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>自动加载 on Liangliangtoo&#39;s Blog</title>
-    <link>https://LucienVen.github.io/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/</link>
+    <link>https://lucienven.github.io/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/</link>
     <description>Recent content in 自动加载 on Liangliangtoo&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 05 Jan 2019 17:59:59 +0800</lastBuildDate>
     
-	<atom:link href="https://LucienVen.github.io/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://lucienven.github.io/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Php遵从psr0的自动加载实现</title>
-      <link>https://LucienVen.github.io/post/php%E9%81%B5%E4%BB%8Epsr0%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0/</link>
+      <link>https://lucienven.github.io/post/php%E9%81%B5%E4%BB%8Epsr0%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0/</link>
       <pubDate>Sat, 05 Jan 2019 17:59:59 +0800</pubDate>
       
-      <guid>https://LucienVen.github.io/post/php%E9%81%B5%E4%BB%8Epsr0%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0/</guid>
+      <guid>https://lucienven.github.io/post/php%E9%81%B5%E4%BB%8Epsr0%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0/</guid>
       <description>&lt;p&gt;自动加载是现代php框架的基石，让php摆脱了“原始社会”的调用模式（笑&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>

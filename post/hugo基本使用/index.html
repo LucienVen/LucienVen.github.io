@@ -20,7 +20,7 @@
 <meta property="og:description" content="hugo基本使用(记录)" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="https://LucienVen.github.io/post/hugo%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" />
+<meta property="og:url" content="https://lucienven.github.io/post/hugo%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" />
 
 
   
@@ -32,7 +32,7 @@
   
   
 
-  <link rel="stylesheet" href="https://LucienVen.github.io//css/redlounge.css">
+  <link rel="stylesheet" href="https://lucienven.github.io//css/redlounge.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
   <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
@@ -76,7 +76,7 @@
 
     <nav class="nav">
       <ul class="nav-list">
-        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://LucienVen.github.io/">Home</a></li>
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://lucienven.github.io/">Home</a></li>
         
           <li class="nav-item"><span class="nav-item-separator">//</span><a href="/post">Blog</a></li>
         
@@ -121,9 +121,12 @@
 <li>
 <ul>
 <li><a href="#关于hugo调试">关于hugo调试</a></li>
+<li><a href="#创建文章">创建文章</a></li>
 <li><a href="#文章格式设置">文章格式设置</a></li>
 <li><a href="#关于文章内容">关于文章内容</a></li>
 <li><a href="#查看内容">查看内容</a></li>
+<li><a href="#一些事项">一些事项：</a></li>
+<li><a href="#参考链接">参考链接：</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -151,9 +154,9 @@
 			
 				<div class="post-categories">
 				
-					<a class="post-category post-category-hugo" href="https://LucienVen.github.io//categories/hugo">hugo</a>
+					<a class="post-category post-category-hugo" href="https://lucienven.github.io//categories/hugo">hugo</a>
 				
-					<a class="post-category post-category-%E8%AE%B0%E5%BD%95" href="https://LucienVen.github.io//categories/%E8%AE%B0%E5%BD%95">记录</a>
+					<a class="post-category post-category-%E8%AE%B0%E5%BD%95" href="https://lucienven.github.io//categories/%E8%AE%B0%E5%BD%95">记录</a>
 				
 				</div>
 			
@@ -181,6 +184,18 @@
 </code></pre>
 
 <p>编译网站内容，并把静态页面输出到/public目录下，然后我们可以通过<strong>git操作</strong>把/public目录下的全部内容上传到github，然后我们就可以通过上面命令中的baseUrl访问了。</p>
+
+<h3 id="创建文章">创建文章</h3>
+
+<pre><code class="language-shell">$ hugo new about.md
+</code></pre>
+
+<p>about.md 自动生成到了 content/about.md</p>
+
+<pre><code class="language-shell">$hugo new post/first.md
+</code></pre>
+
+<p>则文章创建到post目录下</p>
 
 <h3 id="文章格式设置">文章格式设置</h3>
 
@@ -238,6 +253,18 @@
 <li><code>eg: https://lucienven.github.io/categories/</code></li>
 </ul></li>
 </ul>
+
+<h3 id="一些事项">一些事项：</h3>
+
+<ol>
+<li>文章命名，开头若果不是英文，则会出现错误。</li>
+</ol>
+
+<h3 id="参考链接">参考链接：</h3>
+
+<ol>
+<li><a href="https://www.gohugo.org/">Hugo中文文档</a></li>
+</ol>
 	
 			
 
@@ -245,9 +272,9 @@
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-hugo" href="https://LucienVen.github.io//tags/hugo">HUGO</a>,
+	                <a class="post-tag post-tag-hugo" href="https://lucienven.github.io//tags/hugo">HUGO</a>,
 	                
-	                <a class="post-tag post-tag-%E8%AE%B0%E5%BD%95" href="https://LucienVen.github.io//tags/%E8%AE%B0%E5%BD%95">记录</a>,
+	                <a class="post-tag post-tag-%E8%AE%B0%E5%BD%95" href="https://lucienven.github.io//tags/%E8%AE%B0%E5%BD%95">记录</a>,
 	                
 				</div>
 			
@@ -256,6 +283,11 @@
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/post/php%E6%9C%8D%E5%8A%A1%E5%AE%B9%E5%99%A8%E5%AD%A6%E4%B9%A0/">Php服务容器学习</a>
+		            </div>
+		            
 
 					
 					<div class="paging-older">

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>工具 on Liangliangtoo&#39;s Blog</title>
-    <link>https://LucienVen.github.io/tags/%E5%B7%A5%E5%85%B7/</link>
+    <link>https://lucienven.github.io/tags/%E5%B7%A5%E5%85%B7/</link>
     <description>Recent content in 工具 on Liangliangtoo&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 15 Jan 2019 15:07:35 +0800</lastBuildDate>
     
-	<atom:link href="https://LucienVen.github.io/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://lucienven.github.io/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Python实现上传图床脚本</title>
-      <link>https://LucienVen.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/</link>
+      <link>https://lucienven.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/</link>
       <pubDate>Tue, 15 Jan 2019 15:07:35 +0800</pubDate>
       
-      <guid>https://LucienVen.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/</guid>
+      <guid>https://lucienven.github.io/post/python%E5%AE%9E%E7%8E%B0%E4%B8%8A%E4%BC%A0%E5%9B%BE%E5%BA%8A%E8%84%9A%E6%9C%AC/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://sm.ms/&#34;&gt;SM.MS&lt;/a&gt; 是由 V2EX大佬 @&lt;a href=&#34;https://www.v2ex.com/member/Showfom&#34;&gt;Showfom&lt;/a&gt; 自建的，无外链限制，无流量限制的公共图床，而且带有很简洁的API文档。在写markdown文档的时候，插入图片确实是一件我觉得挺麻烦的事情，所以，自己就简单实现了这样一个简单的小脚本，目的是&lt;strong&gt;在上传图片到图床时候，直接返回图片服务器地址&lt;/strong&gt;，然后我们把地址复制到markdown的图片语法的地址栏上就可以在别处访问了。
 &lt;/p&gt;</description>
     </item>

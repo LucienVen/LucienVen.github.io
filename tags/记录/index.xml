@@ -6,10 +6,25 @@
     <description>Recent content in 记录 on Liangliangtoo&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Jan 2019 14:12:23 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 10 Jun 2019 22:51:11 +0800</lastBuildDate>
     
 	<atom:link href="https://lucienven.github.io/tags/%E8%AE%B0%E5%BD%95/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What I Think Now - 2019.05</title>
+      <link>https://lucienven.github.io/post/what-i-think-now---2019/</link>
+      <pubDate>Mon, 10 Jun 2019 22:51:11 +0800</pubDate>
+      
+      <guid>https://lucienven.github.io/post/what-i-think-now---2019/</guid>
+      <description>&lt;p&gt;记录 - 2019.05 - 我突然想到的东西。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;1.php自动加载相关 ，2. axios,post方法问题，3. 域名访问与本地访问，区别&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Hugo基本使用</title>

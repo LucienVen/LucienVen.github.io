@@ -43,13 +43,13 @@
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/tags/hugo/</loc>
+    <loc>https://lucienven.github.io/categories/hugo/</loc>
     <lastmod>2019-01-17T14:12:23+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/categories/hugo/</loc>
+    <loc>https://lucienven.github.io/tags/hugo/</loc>
     <lastmod>2019-01-17T14:12:23+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -67,13 +67,13 @@
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/tags/php/</loc>
+    <loc>https://lucienven.github.io/categories/php/</loc>
     <lastmod>2019-03-14T17:48:37+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/categories/php/</loc>
+    <loc>https://lucienven.github.io/tags/php/</loc>
     <lastmod>2019-03-14T17:48:37+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -85,13 +85,13 @@
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/tags/python/</loc>
+    <loc>https://lucienven.github.io/categories/python/</loc>
     <lastmod>2019-01-15T15:07:35+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/categories/python/</loc>
+    <loc>https://lucienven.github.io/tags/python/</loc>
     <lastmod>2019-01-15T15:07:35+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -163,19 +163,25 @@
   </url>
   
   <url>
+    <loc>https://lucienven.github.io/categories/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/</loc>
+    <lastmod>2019-01-05T17:59:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://lucienven.github.io/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/</loc>
     <lastmod>2019-01-05T17:59:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/tags/%E8%AE%B0%E5%BD%95/</loc>
+    <loc>https://lucienven.github.io/categories/%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2019-06-10T22:51:11+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://lucienven.github.io/categories/%E8%AE%B0%E5%BD%95/</loc>
+    <loc>https://lucienven.github.io/tags/%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2019-06-10T22:51:11+08:00</lastmod>
     <priority>0</priority>
   </url>

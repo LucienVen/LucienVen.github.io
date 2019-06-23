@@ -72,7 +72,7 @@
 	
 
     <h1 class="brand-title">liangliang.too</h1>
-    <h2 class="brand-tagline">如果，这位旅客失去了梦想...</h2>
+    <h2 class="brand-tagline">Don&#39;t Panic.</h2>
 
     <nav class="nav">
       <ul class="nav-list">
@@ -92,8 +92,6 @@
         <a href="https://github.com/LucienVen" target="_blank"><i class='fa fa-github'></i></a>
         
       
-        
-        <a href="http://www.twitter.com/shift8creative" target="_blank"><i class='fa fa-twitter'></i></a>
         
       
       
@@ -121,17 +119,41 @@
 <li>
 <ul>
 <li><a href="#require-include">require / include</a></li>
+<li><a href="#命名空间">命名空间</a>
+<ul>
+<li><a href="#不使用命名空间">不使用命名空间</a></li>
+<li><a href="#使用命名空间">使用命名空间</a></li>
+<li><a href="#如何调用命名空间之间的方法和函数">如何调用命名空间之间的方法和函数</a></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
 <li><a href="#什么是自动加载">什么是自动加载</a></li>
 <li><a href="#使用-autoload实现自动加载">使用__autoload实现自动加载</a></li>
-<li><a href="#命名空间">命名空间</a></li>
 <li><a href="#psr-0-与-psr-4">PSR-0 与 PSR-4</a>
 <ul>
 <li><a href="#psr-0-自动加载规范-已弃用">PSR-0 自动加载规范（已弃用）</a></li>
+<li><a href="#psr-4-自动加载规范-https-learnku-com-docs-psr-psr-4-autoloader-1608"><a href="https://learnku.com/docs/psr/psr-4-autoloader/1608">PSR-4 自动加载规范</a></a></li>
+<li><a href="#对于两者">对于两者</a></li>
 </ul></li>
+<li><a href="#spl-autoload-register">spl_autoload_register()</a>
+<ul>
 <li><a href="#使用spl-autoload-register-实现自动加载">使用spl_autoload_register()实现自动加载</a></li>
-<li><a href="#遵从psr-0的自动加载简单实现">遵从PSR-0的自动加载简单实现</a></li>
+</ul></li>
+<li><a href="#遵从psr-0的自动加载简单实现">遵从PSR-0的自动加载简单实现</a>
+<ul>
+<li><a href="#基本要求">基本要求</a></li>
+<li><a href="#目录结构">目录结构</a></li>
+<li><a href="#基础实现">基础实现</a>
+<ul>
+<li><a href="#描述所希望实现的">描述所希望实现的</a></li>
+</ul></li>
+<li><a href="#创建自动加载器">创建自动加载器</a></li>
+<li><a href="#入口文件引入自动加载器">入口文件引入自动加载器</a></li>
+<li><a href="#访问与结果">访问与结果</a></li>
+<li><a href="#实现代码">实现代码</a></li>
+</ul></li>
 <li><a href="#使用composer自动加载">使用composer自动加载</a></li>
-<li><a href="#总结">总结</a></li>
+<li><a href="#总结-1">总结</a></li>
+<li><a href="#参考链接">参考链接</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -162,6 +184,8 @@
 					<a class="post-category post-category-php" href="https://lucienven.github.io//categories/php">PHP</a>
 				
 					<a class="post-category post-category-%E5%8E%9F%E7%90%86" href="https://lucienven.github.io//categories/%E5%8E%9F%E7%90%86">原理</a>
+				
+					<a class="post-category post-category-%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD" href="https://lucienven.github.io//categories/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD">自动加载</a>
 				
 				</div>
 			
@@ -237,6 +261,89 @@ className: Foo // 代码继续执行，$foo-&gt;printIn()输出成功
 
 <p>当我们的php代码较为简单的时候（比如练手写个留言板），这样一个个文件require / include 当然是没有问题的，但是代码量上去了，项目结构变得复杂的时候，人力维护这样的引入就会显得十分困难，而且十分容易出错。</p>
 
+<h3 id="命名空间">命名空间</h3>
+
+<p>什么是命名空间呢？简单的说就是现在我们习以为常的<strong>在每个php文件开头定义namespace语句</strong>。</p>
+
+<p>对于命名空间的作用，我们可以简单用一个require的例子来展示一下使用命名空间与不使用命名空间的差别。</p>
+
+<p>在demo目录下，存放<code>test.php, test1.php, test2.php</code></p>
+
+<h4 id="不使用命名空间">不使用命名空间</h4>
+
+<pre><code class="language-php"># test1.php
+&lt;?php 
+function test()
+{
+    echo __FILE__;
+}
+
+# test2.php
+function test()
+{
+    echo __FILE__;
+}
+
+# test.php
+&lt;?php
+require 'test1.php';
+require 'test2.php';
+</code></pre>
+
+<p>在命令行运行<code>test.php</code>，会出现报错<code>Fatal error: Cannot redeclare test()</code>，函数重命名错误;</p>
+
+<h4 id="使用命名空间">使用命名空间</h4>
+
+<p>其实代码与上面差不多，但是在文件开头加上namespace命名空间</p>
+
+<pre><code class="language-php"># test1.php
+&lt;?php 
+namespace Test1;
+function test()
+{
+    echo __FILE__;
+}
+
+# test2.php
+namespace Test2;
+function test()
+{
+    echo __FILE__;
+}
+
+# test.php
+&lt;?php
+require 'test1.php';
+require 'test2.php';
+</code></pre>
+
+<p>在命令行运行<code>test.php</code>，则终端没有报错输出，证明requeire成功。</p>
+
+<h4 id="如何调用命名空间之间的方法和函数">如何调用命名空间之间的方法和函数</h4>
+
+<p>命名空间后加上方法名，注意的是使用反斜杠&rsquo; \ &lsquo;</p>
+
+<pre><code class="language-php"># test.php
+&lt;?php
+require 'test1.php';
+require 'test2.php';
+
+Test1\test();
+echo PHP_EOL; # 换行，让打印好看一点
+Test2\test();
+</code></pre>
+
+<p>运行<code>test.php</code>，则会有相应文件名输出</p>
+
+<pre><code class="language-php">$ php test.php
+/usr/local/var/www/test/demo/test1.php
+/usr/local/var/www/test/demo/test2.php% 
+</code></pre>
+
+<h4 id="总结">总结</h4>
+
+<p>早期php是没有命名空间的，在项目越来越大的时候，就难以避免产生命名冲突问题；另一方面，也难以对类与方法进行管理。<strong>而命名空间可以帮助解决命名冲突的问题，而且可以类似包的概念，对代码层次进行划分。</strong>并且，随着命名空间对代码结构的规范，php能很好地实现对<strong>类的自动加载</strong>。</p>
+
 <h3 id="什么是自动加载">什么是自动加载</h3>
 
 <p>在php manual中，<a href="http://php.net/manual/zh/language.oop5.autoload.php">类的自动加载</a>章节中有这样的描述：</p>
@@ -249,7 +356,7 @@ className: Foo // 代码继续执行，$foo-&gt;printIn()输出成功
 <p>尽管 <a href="http://php.net/manual/zh/function.autoload.php">__autoload()</a> 函数也能自动加载类和接口，但更建议使用 <a href="http://php.net/manual/zh/function.spl-autoload-register.php">spl_autoload_register()</a> 函数。<a href="http://php.net/manual/zh/function.spl-autoload-register.php">spl_autoload_register()</a> 提供了一种更加灵活的方式来实现类的自动加载（同一个应用中，可以支持任意数量的加载器，比如第三方库中的）。因此，不再建议使用 <a href="http://php.net/manual/zh/function.autoload.php">__autoload()</a> 函数，在以后的版本中它可能被弃用。</p>
 </blockquote>
 
-<p><strong>在我个人的理解中，自动加载就是在开发者对类或者接口进行调用的时候，能提供自动引入的功能，而不需要开发者人力把文件一个个引入需要的文件中，从而完成对需要的类或者接口的调用。</strong></p>
+<p>在以往的项目中，如果一个类需要依赖其他几十个类的话，就需要在这个类前面写几十行requeire/include，明显很不人性吧。<strong>在我个人的理解中，自动加载就是在开发者对类或者接口进行调用的时候，能提供自动引入的功能，而不需要开发者人力把文件一个个引入需要的文件中，从而完成对需要的类或者接口的调用。</strong></p>
 
 <p>又上面引用的段落，我们知道php 提供两个函数可以完成自动载入功能。下面我们来先看__autoload的实现。</p>
 
@@ -273,7 +380,7 @@ $foo = new Foo;
 
 <p>使用__autoload，加载<code>Foo.php</code>，不过我们先来看看这个函数的参数$class代表什么意思</p>
 
-<pre><code>// Bar.php
+<pre><code class="language-php">// Bar.php
 function __autoload($className)
 {
     echo $className;
@@ -349,15 +456,13 @@ className: Bim
 className: Cook
 </code></pre>
 
-<p>由上可见，__autoload函数实现的自动加载，可以自动获取需要的引入的类名，在其内部使用一个requeire或者其他相似功能的方法，就可以实现多个类的引入。</p>
+<p><strong>由上可见，__autoload函数实现的自动加载，在调用未知的类时，可以自动获取需要的引入的类名，在其内部使用一个requeire或者其他相似功能的方法，就可以实现多个类的引入。</strong></p>
 
 <blockquote>
-<p><strong>该方法在PHP 7.2.0 中已被弃用。</strong></p>
+<p>该方法在PHP 7.2.0 中已被弃用。</p>
 
 <p><strong>This feature has been <em>DEPRECATED</em> as of PHP 7.2.0. Relying on this feature is highly discouraged.</strong></p>
 </blockquote>
-
-<h3 id="命名空间">命名空间</h3>
 
 <h3 id="psr-0-与-psr-4">PSR-0 与 PSR-4</h3>
 
@@ -371,22 +476,212 @@ className: Cook
 
 <h4 id="psr-0-自动加载规范-已弃用">PSR-0 自动加载规范（已弃用）</h4>
 
-<p>PSR-4规范是PSR-0的升级版本，<strong>是改进的自动加载规范</strong>。</p>
+<ol>
+<li>命名空间必须与绝对路径一致</li>
+<li>类名首字母大写</li>
+<li>除入口文件外，其他<code>.php</code>必须只有一个类</li>
+</ol>
 
-<p><img src="https://i.loli.net/2019/01/07/5c331063944fe.jpeg" alt="结衣老婆" /></p>
+<h4 id="psr-4-自动加载规范-https-learnku-com-docs-psr-psr-4-autoloader-1608"><a href="https://learnku.com/docs/psr/psr-4-autoloader/1608">PSR-4 自动加载规范</a></h4>
 
-<h3 id="使用spl-autoload-register-实现自动加载">使用spl_autoload_register()实现自动加载</h3>
+<blockquote>
+<p>PSR-4规范是PSR-0的升级版本，<strong>是改进的自动加载规范</strong>，是对PSR-0的补充</p>
+</blockquote>
+
+<ol>
+<li>全限定类名<strong>必须</strong>拥有一个顶级命名空间名称，也称为供应商命名空间（vendor namespace）。</li>
+<li>全限定类名<strong>可以</strong>有一个或者多个子命名空间名称。</li>
+<li>全限定类名<strong>必须</strong>有一个最终的类名（我想意思应该是你不能这样 <code>\&lt;NamespaceName&gt;(\&lt;SubNamespaceNames&gt;)*\</code> 来表示一个完整的类）。</li>
+<li>下划线在全限定类名中没有任何特殊含义（在 <a href="https://learnku.com/docs/psr/psr-0-automatic-loading-specification">PSR-0</a> 中下划是有含义的）。</li>
+<li>全限定类名<strong>可以</strong>是任意大小写字母的组合。</li>
+<li>所有类名的引用<strong>必须</strong>区分大小写。</li>
+</ol>
+
+<h4 id="对于两者">对于两者</h4>
+
+<p>或者可以这样简单理解：</p>
+
+<ol>
+<li>PSR-0，类 - 文件自动加载</li>
+<li>PSR-4，面向包的自动加载</li>
+</ol>
+
+<p>面对composer的发展，PSR-4 是为了给可交互的 PHP 自动加载器指定一个将命名空间映射到文件系统的规则，并且可以与其他 SPL 注册的自动加载器共存。PSR-4 不是 PSR-0 的替代品，而是对它的补充。</p>
+
+<h3 id="spl-autoload-register">spl_autoload_register()</h3>
+
+<p>spl_autoload_register() 是目前推荐的自动加载实现函数，对比<code>__autoload</code>，而<code>__autoload</code>实现的自动加载器只能有一个，spl_autoload_register的优势在于可以实现多个自动加载器。</p>
+
+<h4 id="使用spl-autoload-register-实现自动加载">使用spl_autoload_register()实现自动加载</h4>
+
+<p>spl_autoload_register的自动加载实现与__autoload相似。</p>
+
+<pre><code class="language-php"># test1.php
+class Test1
+{
+    static function test()
+    {
+        echo __METHOD__;
+    }
+}
+
+# test2.php
+class Test2
+{
+    static function test()
+    {
+        echo __METHOD__;
+    }
+}
+
+# test.php
+&lt;?php
+spl_autoload_register('autoload1');
+# 能注册多个自动加载器
+# spl_autoload_register('autoload2');
+Test1::test();
+echo PHP_EOL;
+Test2::test();
+
+function autoload1($class)
+{
+    require __DIR__ . '/' . $class . '.php';
+}
+
+# function autoload2($class){}
+</code></pre>
+
+<p>能获得输出：</p>
+
+<pre><code class="language-php">Test1::test
+Test2::test
+</code></pre>
 
 <h3 id="遵从psr-0的自动加载简单实现">遵从PSR-0的自动加载简单实现</h3>
 
+<h4 id="基本要求">基本要求</h4>
+
+<ol>
+<li>全部使用命名空间</li>
+<li>所有php文件自动载入，不能有include/require</li>
+<li>实现单一入口</li>
+</ol>
+
+<h4 id="目录结构">目录结构</h4>
+
+<pre><code class="language-shell">.
+├── App						# 应用程序
+│   ├── Action
+│   │   └── Index.php
+│   └── Model
+├── Core					# 核心类
+│   ├── Loader.php
+│   └── Test.php
+└── index.php				# 入口文件
+</code></pre>
+
+<p>然后我们从头开始理解遵从PSR-0的自动加载简单实现</p>
+
+<h4 id="基础实现">基础实现</h4>
+
+<h5 id="描述所希望实现的">描述所希望实现的</h5>
+
+<p>我们的业务代码存放在App目录下，Action存放逻辑的具体实现。</p>
+
+<pre><code class="language-php"># Index.php
+&lt;?php
+namespace App\Action;
+class Index
+{
+    static function test()
+    {
+        echo __METHOD__ . PHP_EOL;     
+    }
+}
+</code></pre>
+
+<p>这里注意的是，遵从PSR-0</p>
+
+<ol>
+<li><strong>命名空间必须与绝对路径一致</strong>，Index.php在项目中的路径是 App/Action，故这里的命名空间为 <code>namespace App\Action;</code></li>
+<li><strong>类名与文件名一致，且首字母大写</strong>，故<code>class Index{}</code></li>
+</ol>
+
+<pre><code class="language-php"># 入口文件 index.php
+
+&lt;?php
+// 具体目标
+App\Action\Index::test();
+Core\Test::test();
+</code></pre>
+
+<p>查看入口文件index.php，引用了两个静态方法，我们希望访问入口文件的时候，能成功调用这两个方法，且不需要专门require/include这两个文件/类。</p>
+
+<h4 id="创建自动加载器">创建自动加载器</h4>
+
+<p>Core目录，存放项目核心类。自动加载器类也在这里实现。</p>
+
+<pre><code class="language-php"># Loader.php 自动加载器类
+&lt;?php
+/**
+ * 自动加载器的实现
+ */
+namespace Core;
+
+class Loader
+{
+    static function autoload($class)
+    {
+        require BASEDIR.'/'.str_replace('\\', '/', $class) . '.php';
+        
+    }
+}
+</code></pre>
+
+<p><code>Loader::autoload</code>方法中，$class参数，<strong>是自动获取到的需要加载的&rdquo;类的名称&rdquo;</strong>，结果类似<code>Core\Test</code>，是带有命名空间的类名。因为，<code>Core\Test</code>中的&rsquo;\&lsquo;，故使用<code>str_replace()</code>函数，把符号替换为路径使用的 &lsquo;/&lsquo;。</p>
+
+<h4 id="入口文件引入自动加载器">入口文件引入自动加载器</h4>
+
+<pre><code class="language-php"># index.php
+&lt;?php
+// 定义常量
+define('BASEDIR', __DIR__); 
+
+// 引入自动加载类
+include BASEDIR . '/Core/Loader.php';
+spl_autoload_register('\\Core\\Loader::autoload');
+
+// 具体目标
+App\Action\Index::test();
+Core\Test::test();
+</code></pre>
+
+<h4 id="访问与结果">访问与结果</h4>
+
+<pre><code class="language-php">$ php index.php
+App\Action\Index::test
+Core\Test::test
+</code></pre>
+
+<h4 id="实现代码">实现代码</h4>
+
+<p><a href="https://github.com/LucienVen/php_demo/tree/master/autoload_demo">https://github.com/LucienVen/php_demo/tree/master/autoload_demo</a></p>
+
 <h3 id="使用composer自动加载">使用composer自动加载</h3>
 
-<h3 id="总结">总结</h3>
+<p>暂略</p>
 
-<p>引用</p>
+<h3 id="总结-1">总结</h3>
+
+<p>自动加载是现代php框架的很重要的一部分，虽然已经平常到大家可能都有所忽略，对于疲于编写业务代码的人（唉人生）来说，框架已经能帮大家搞掂这些内容了。对我而言，因为我接触的<code>slim</code>框架（一个专注于接口开发的php微框架），并没有像ThinkPHP这般，按照官方文档给好的代码组织结构，controller, model, validate，就可以好好搬砖了2333，</p>
+
+<p>但是我希望Slim也能好好搬砖鸭，我想所以这也是我重头回望自动加载的原因吧。</p>
+
+<h3 id="参考链接">参考链接</h3>
 
 <ul>
-<li></li>
+<li><a href="https://www.imooc.com/learn/236">大话PHP设计模式 - 第3章 命名空间与Autoload - Rango</a></li>
+<li><a href="https://laravel-china.org/index.php/docs/psr">PSR 标准规范中文版</a></li>
 </ul>
 	
 			

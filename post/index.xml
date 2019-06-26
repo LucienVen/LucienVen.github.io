@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Liangliangtoo&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Jun 2019 22:51:11 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 26 Jun 2019 02:04:34 +0800</lastBuildDate>
     
 	<atom:link href="https://lucienven.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>如果windows的体验能有macOS的80%..</title>
+      <link>https://lucienven.github.io/post/%E5%A6%82%E6%9E%9Cwindows%E7%9A%84%E4%BD%93%E9%AA%8C%E8%83%BD%E6%9C%89macos%E7%9A%8480../</link>
+      <pubDate>Wed, 26 Jun 2019 02:04:34 +0800</pubDate>
+      
+      <guid>https://lucienven.github.io/post/%E5%A6%82%E6%9E%9Cwindows%E7%9A%84%E4%BD%93%E9%AA%8C%E8%83%BD%E6%9C%89macos%E7%9A%8480../</guid>
+      <description>&lt;p&gt;成为4、5年mac用户之后，终于windows也追上来了。我仍然是赞同mac对于开发者更加合适，但是我也觉得在docker发展与普及后，windows上的开发体验也是越来越来好了。所以，如果是现在的我，平衡性价比的情况下，我确实会选择组织一台台式机，&lt;strong&gt;但是还是加上一句——在平衡日常使用的情况下&lt;/strong&gt;。但是此文，还是甚少评论开发环境之间的差异，因为windows敢把命令行弄好吗？？？hhhh&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>What I Think Now - 2019.05</title>

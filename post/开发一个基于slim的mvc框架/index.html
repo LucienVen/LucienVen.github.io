@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    开发一个基于slim的mvc框架 // Liangliangtoo&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.38" />
+
+  <meta property="og:title" content="开发一个基于slim的mvc框架" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://lucienven.github.io/post/%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Eslim%E7%9A%84mvc%E6%A1%86%E6%9E%B6/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="https://lucienven.github.io//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Liangliangtoo&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+
+    <h1 class="brand-title">liangliang.too</h1>
+    <h2 class="brand-tagline">Don&#39;t Panic.</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://lucienven.github.io/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/post">Blog</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/about">about</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/LucienVen" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#slim框架是什么">slim框架是什么？</a></li>
+<li><a href="#hello-world-slim框架的基础使用">Hello, World——slim框架的基础使用</a>
+<ul>
+<li><a href="#安装">安装</a></li>
+</ul></li>
+<li><a href="#开发目标-怎么才能算一个基础mvc框架呢">开发目标——怎么才能算一个基础MVC框架呢？</a></li>
+<li><a href="#项目目录结构">项目目录结构</a></li>
+<li><a href="#主要实现">主要实现</a>
+<ul>
+<li><a href="#框架限制与未实行功能">框架限制与未实行功能</a></li>
+</ul></li>
+<li><a href="#总结与参考">总结与参考</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/post/%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Eslim%E7%9A%84mvc%E6%A1%86%E6%9E%B6/">开发一个基于slim的mvc框架</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jun</span> <span class="post-date-year">2019</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+
+			
+
+			
+
+            
+
+<p>开发一个基于slim的MVC框架，希望该框架能很好地实现项目代码结构的分层，能够支持中型应用的实现。</p>
+
+<!-- more -->
+
+<h2 id="slim框架是什么">slim框架是什么？</h2>
+
+<p>slim框架是什么？我们可以参考<a href="http://45.63.120.39/docs/handlers/not-found.html">SlimPHP中文网 - Slim 框架</a>的描述，此处搬运一下</p>
+
+<blockquote>
+<p>Slim是一款 PHP 微框架，可以帮助你快速编写简单但功能强大的 web 应用和 API 。在它的核心，Slim 是一个调度程序，它接收一个 HTTP 请求，调用一个适当的回调例程，然后返回一个 HTTP 响应。就这样简单。</p>
+</blockquote>
+
+<p>是的，就是接受<strong>请求、回调、返回响应</strong>。slim框架是一个moderm php框架，由文档可知，文档主要描述的就是<strong>请求、响应、路由</strong>三块内容，并且框架的<a href="http://45.63.120.39/docs/concepts/value-objects.html">概念</a>一章，描述了slim实现的主要思想</p>
+
+<ol>
+<li>请求与响应对象支持PSR-7</li>
+<li>用于某些场景的处理——同心圆式的中间件调用</li>
+<li>解耦——服务容器的实现</li>
+</ol>
+
+<p>但是目前slim框架已经升级至4.0版本，本文依旧使用的是slim 3.0版本。</p>
+
+<h2 id="hello-world-slim框架的基础使用">Hello, World——slim框架的基础使用</h2>
+
+<h3 id="安装">安装</h3>
+
+<p>创建目录，按照<a href="http://45.63.120.39/docs/start/installation.html">文档</a>，使用composer安装</p>
+
+<pre><code class="language-php">composer require slim/slim &quot;^3.0&quot;
+</code></pre>
+
+<p>然后在根目录下创建一个<code>index.php</code>文件，引入composer的提供的自动加载器即可使用slim（与日常使用的其他composer组件一样），然后安装国际惯例我们尝试打印一个Hello, world</p>
+
+<pre><code class="language-php">// index.php
+&lt;?php
+require 'vendor/autoload.php';
+
+// 创建并配置 Slim app
+$app = new \Slim\App;
+
+$app-&gt;get('/', function ($request, $response, $args) {
+    return $response-&gt;write(&quot;Hello, world&quot;);
+});
+
+// 运行 app
+$app-&gt;run();
+</code></pre>
+
+<p>在浏览器中访问，即可看到打印<code>Hello, world</code></p>
+
+<p>由此，我们看到slim框架的使用，可以在一个.php文件中完成，仅业务代码其执行流程为：<strong>实例化slim -&gt; 请求与响应 -&gt; 实例运行</strong>。</p>
+
+<p>更细化一点描述，该段index.php代码中，起主要作用的代码段为</p>
+
+<pre><code class="language-php">$app-&gt;get('/', function ($request, $response, $args) {
+    return $response-&gt;write(&quot;Hello, world&quot;);
+});
+</code></pre>
+
+<p>对于这段代码，意思是</p>
+
+<ol>
+<li><p><code>$app-&gt;get('/', function(){})</code>，定义一个路由&rsquo;/&lsquo;，定义匿名函数作为路由回调方法</p></li>
+
+<li><p><code>$request</code>，把PSR 7 请求对象作为路由回调的第一个参数注入到你的 Slim 应用程序的路由中，</p></li>
+
+<li><p><code>$response</code>，PSR 7 响应对象作为路由回调的第二个参数注入到 Slim 应用程序的路由中</p></li>
+
+<li><p><code>$args</code>，接收路由参数</p></li>
+
+<li><p><code>$response-&gt;wiite()</code>，返回内容写入到 PSR 7 响应对象</p></li>
+</ol>
+
+<p>更详细的信息建议查看文档中请求与响应章节。</p>
+
+<h2 id="开发目标-怎么才能算一个基础mvc框架呢">开发目标——怎么才能算一个基础MVC框架呢？</h2>
+
+<p><strong>MVC主要是一种代码组织结构</strong>，而对于如 Thinkphp框架，每个模块中<strong>controller, model, validate</strong>层次分明，对于中大型项目而言，不可能把全部代码放在同一个php文件中，就此开发——因为这样的项目开发逻辑与维护性都极差。</p>
+
+<p>对于<strong>一般MVC框架的加载流程</strong>，个人理解为：</p>
+
+<ol>
+<li>入口文件，定义常量</li>
+<li>加载异常处理类（未完成）</li>
+<li>加载框架核心类，加载自动加载类</li>
+<li>读取配置文件，获取应用程序实例</li>
+<li>注册容器服务，中间件，路由</li>
+<li>启动应用程序</li>
+<li>路由回调</li>
+</ol>
+
+<p><strong>故我们的目标是什么呢？</strong>实现目标是：</p>
+
+<ol>
+<li>实现单一入口</li>
+<li>项目的代码结构分层（Action - Model）</li>
+<li>实现遵从PSR-0规范的自动加载</li>
+<li>实现配置文件独立</li>
+<li>中间件与容器独立配置/编写</li>
+</ol>
+
+<p>但是又由于个人更倾向于<strong>前后端分离的开发模式</strong>，故本文中的MVC的View实际上并不存在hhh，所以或许对于本文的MVC，可以视作Action-Model。</p>
+
+<p>所以，结合我理解的一般MVC框架的加载流程，框架加载流程图如下图所示：</p>
+
+<p><img src="https://camo.githubusercontent.com/5457f5f4a7cbf84d37099f3252ea58d8557402b3/68747470733a2f2f692e6c6f6c692e6e65742f323031392f30332f30342f356337636462396136383133392e706e67" alt="加载流程" /></p>
+
+<h2 id="项目目录结构">项目目录结构</h2>
+
+<p>基本的目录结构如下所示，</p>
+
+<pre><code class="language-php">.
+├── App				# 应用程序
+├── Core				# 框架核心类
+├── composer.json		
+├── composer.lock
+├── public				# 入口文件
+└── vendor				
+</code></pre>
+
+<h2 id="主要实现">主要实现</h2>
+
+<h3 id="框架限制与未实行功能">框架限制与未实行功能</h3>
+
+<p>目前实现的一些不足：</p>
+
+<ol>
+<li>仅支持单应用入口</li>
+</ol>
+
+<p>也因为单应用入口，故容器类，配置类，路由类，均为该应用实例服务（或许下一步应该按照其余框架一般，定义几个层次的配置文件实现）</p>
+
+<p>未实现功能：</p>
+
+<ol>
+<li>自定义错误处理</li>
+<li>log 日志记录</li>
+</ol>
+
+<h2 id="总结与参考">总结与参考</h2>
+
+	
+			
+
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/post/%E5%A6%82%E6%9E%9Cwindows%E7%9A%84%E4%BD%93%E9%AA%8C%E8%83%BD%E6%9C%89macos%E7%9A%8480../">如果windows的体验能有macOS的80%..</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2019. All rights reserved.</p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

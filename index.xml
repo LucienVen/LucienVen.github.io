@@ -17,7 +17,7 @@
       <pubDate>Thu, 27 Jun 2019 15:59:38 +0800</pubDate>
       
       <guid>https://lucienven.github.io/post/%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Eslim%E7%9A%84mvc%E6%A1%86%E6%9E%B6/</guid>
-      <description>开发一个基于slim的MVC框架，希望该框架能很好地实现项目代码结构的分层，能够支持中型应用的实现。 slim框架是什么？ slim框架是什么？</description>
+      <description>开发一个基于slim的MVC框架，在slim框架的基础上进行代码组织结构方面的提升，希望该框架能很好地实现项目代码结构的分层，能够支持中型应</description>
     </item>
     
     <item>
@@ -63,7 +63,7 @@
       <pubDate>Fri, 25 Jan 2019 15:36:47 +0800</pubDate>
       
       <guid>https://lucienven.github.io/post/php%E6%9C%8D%E5%8A%A1%E5%AE%B9%E5%99%A8%E5%AD%A6%E4%B9%A0/</guid>
-      <description>&lt;p&gt;PHP服务容器学习，&lt;/p&gt;
+      <description>&lt;p&gt;这篇PHP服务容器学习，是学习大佬的文章&lt;a href=&#34;https://www.insp.top/learn-laravel-container&#34;&gt;laravel 学习笔记 —— 神奇的服务容器&lt;/a&gt;的笔记，&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
     </item>

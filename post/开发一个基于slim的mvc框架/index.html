@@ -120,10 +120,42 @@
 <li><a href="#hello-world-slim框架的基础使用">Hello, World——slim框架的基础使用</a>
 <ul>
 <li><a href="#安装">安装</a></li>
+<li><a href="#为什么要基于slim框架">为什么要基于slim框架?</a></li>
 </ul></li>
 <li><a href="#开发目标-怎么才能算一个基础mvc框架呢">开发目标——怎么才能算一个基础MVC框架呢？</a></li>
 <li><a href="#项目目录结构">项目目录结构</a></li>
-<li><a href="#主要实现">主要实现</a>
+<li><a href="#框架主要加载流程与具体实现">框架主要加载流程与具体实现</a></li>
+<li><a href="#如何使用">如何使用？</a>
+<ul>
+<li><a href="#容器定义-以monolog为例">容器定义——以monolog为例</a>
+<ul>
+<li><a href="#引入monolog">引入monolog</a></li>
+<li><a href="#创建log目录-以及更改权限">创建Log目录，以及更改权限</a></li>
+<li><a href="#在容器中定义">在容器中定义</a></li>
+<li><a href="#在action中使用">在Action中使用</a></li>
+<li><a href="#结果">结果</a></li>
+</ul></li>
+<li><a href="#中间件使用">中间件使用</a>
+<ul>
+<li><a href="#中间件的定义与实现">中间件的定义与实现</a></li>
+<li><a href="#中间件的调用与执行顺序">中间件的调用与执行顺序</a></li>
+</ul></li>
+<li><a href="#action-控制器">Action 控制器</a></li>
+<li><a href="#model-模型类">Model 模型类</a></li>
+</ul></li>
+<li><a href="#在本框架中使用illuminate-database-laravel-数据库操作">在本框架中使用Illuminate Database （Laravel 数据库操作）</a>
+<ul>
+<li><a href="#本框架中的实现步骤">本框架中的实现步骤</a>
+<ul>
+<li><a href="#连接参数">连接参数</a></li>
+<li><a href="#定义基类-core-model-php">定义基类 \Core\Model.php</a></li>
+<li><a href="#模型类定义">模型类定义</a></li>
+<li><a href="#控制器中使用">控制器中使用</a></li>
+<li><a href="#结果-1">结果</a></li>
+<li><a href="#题外话-一个小有意思的bug">题外话，一个小有意思的bug</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#基础使用">基础使用</a>
 <ul>
 <li><a href="#框架限制与未实行功能">框架限制与未实行功能</a></li>
 </ul></li>
@@ -159,7 +191,7 @@
 
             
 
-<p>开发一个基于slim的MVC框架，希望该框架能很好地实现项目代码结构的分层，能够支持中型应用的实现。</p>
+<p>开发一个基于slim的MVC框架，在slim框架的基础上进行代码组织结构方面的提升，希望该框架能很好地实现项目代码结构的分层，能够支持中型应用的实现。</p>
 
 <!-- more -->
 
@@ -234,6 +266,15 @@ $app-&gt;run();
 
 <p>更详细的信息建议查看文档中请求与响应章节。</p>
 
+<h3 id="为什么要基于slim框架">为什么要基于slim框架?</h3>
+
+<ol>
+<li>slim是一个微框架，也就是说代码体积很小，并不是像ThinkPHP，或者larvael框架一般提供十分完整的操作逻辑。就此或许能描述为：slim框架设计的本意就是——人们不一定需要大型框架的全部功能，开发者可以自行选择自己所需要的。</li>
+<li>支持psr7的请求与响应对象，支持容器，支持中间件——modern php framework，也就是说slim虽然小，但是足够应对基础场景。</li>
+</ol>
+
+<p>就此，明确的是，并非本人独立开发了一个php框架（笑，而是<strong>本框架基于slim框架，然后对于官方文档中代码组织结构的不明晰，故而对该部分进行更为MVC的代码组织结构上的修改</strong>。主要实现内容，slim框架中已有很好的实现，另一部分可以说本文是在slim框架下开发的一个应用而已。</p>
+
 <h2 id="开发目标-怎么才能算一个基础mvc框架呢">开发目标——怎么才能算一个基础MVC框架呢？</h2>
 
 <p><strong>MVC主要是一种代码组织结构</strong>，而对于如 Thinkphp框架，每个模块中<strong>controller, model, validate</strong>层次分明，对于中大型项目而言，不可能把全部代码放在同一个php文件中，就此开发——因为这样的项目开发逻辑与维护性都极差。</p>
@@ -279,7 +320,310 @@ $app-&gt;run();
 └── vendor				
 </code></pre>
 
-<h2 id="主要实现">主要实现</h2>
+<h2 id="框架主要加载流程与具体实现">框架主要加载流程与具体实现</h2>
+
+<ol>
+<li>public/index.php 入口文件，定义常量：应用程序路径，框架核心类路径，配置文件路径</li>
+<li>引入Core/Init.php，进行核心类的初始化工作</li>
+<li>在Core/Init.php中，注册composer的自动加载器，注册框架自定义自动加载器</li>
+<li>Core/Config.php定义配置文件类，并提供给Init.php</li>
+<li>Core/start.php，提供实例化slim应用操作，返回app实例</li>
+<li>在public/index.php中引入public/start.php框架执行类</li>
+<li>启动session或者其他常规设置</li>
+<li>注册检索当前路由中间件，以便获取路由参数信息</li>
+<li>注册slim容器</li>
+<li>注册slim路由</li>
+<li>运行app实例</li>
+</ol>
+
+<p><strong>其实难度而言，不是很难，重点是框架代码的组织结构，根据文档一步一步，把相关内容都独立处理而不是放在同一个文件中。</strong>从public/index.php开始，一行一行下去就能清晰理解了。</p>
+
+<h2 id="如何使用">如何使用？</h2>
+
+<p>本节关心的内容时，如何使用，也就是如何进行curd操作。一般步骤：</p>
+
+<ol>
+<li>路由定义</li>
+<li>编写controller，继承Core/Action基类（本框架中Action为控制器类，与平常使用的Controller有些区别，但也只是单词使用不同而已，实质内容与作用相同）</li>
+<li>编写model，基础Core/Model基类</li>
+<li>对于redis，或者monolog此类组件，可以在Dependencies.php容器类中定义，然后可在全局使用。</li>
+<li>中间件定义与使用</li>
+</ol>
+
+<h3 id="容器定义-以monolog为例">容器定义——以monolog为例</h3>
+
+<h4 id="引入monolog">引入monolog</h4>
+
+<pre><code class="language-php">composer require monolog/monolog
+</code></pre>
+
+<h4 id="创建log目录-以及更改权限">创建Log目录，以及更改权限</h4>
+
+<p>在项目根目录下创建Log文件夹，更改权限为777，并在入口文件中定义Log日志目录常量</p>
+
+<pre><code class="language-php">mkdir Log
+chmod -R 777 Log
+
+# public/index.php
+define(&quot;LOG_PATH&quot;, __DIR__ . &quot;/../Log&quot;);
+</code></pre>
+
+<h4 id="在容器中定义">在容器中定义</h4>
+
+<pre><code class="language-php">// Dependencies.php
+$container['logger'] = function($c){
+    // 
+    $logger = new \Monolog\Logger('my_logger');
+    // 日志按日记录
+    $log_name = LOG_PATH . DIRECTORY_SEPARATOR . date('Ymd', time()) . '.log';
+    $file_handler = new \Monolog\Handler\StreamHandler($log_name);
+    $logger-&gt;pushHandler($file_handler);
+    return $logger;
+};
+</code></pre>
+
+<h4 id="在action中使用">在Action中使用</h4>
+
+<pre><code class="language-php">// Test.php
+&lt;?php
+namespace App\Action;
+
+use Core\Action;
+use App\Model\Test as TestModel;
+
+class Test extends Action
+{
+    /**
+     * 测试monolog 日志记录
+     */
+    public function log()
+    {
+        // 在容器获取logger实例
+        $this-&gt;_container-&gt;get('logger')-&gt;addInfo('test logger');
+        echo 'logger runing';
+    }    
+}
+</code></pre>
+
+<h4 id="结果">结果</h4>
+
+<p>在项目Log目录下，出现当前日期命名的log日志文件，查看.log文件内容，可见是Action定义的addInfo内容“test logger”</p>
+
+<p><img src="https://i.loli.net/2019/07/03/5d1c8d7cc337183723.png" alt="log" /></p>
+
+<h3 id="中间件使用">中间件使用</h3>
+
+<blockquote>
+<p>Slim文档的描述：</p>
+
+<p>在你的 Slim 应用<em>之前（before）</em> 和 <em>之后（after）</em> 运行代码来处理你认为合适的请求和响应对象。这就叫做*中间件*。</p>
+</blockquote>
+
+<p>或另一个角度参照 ThinkPHP5.1 框架中对中间件的描述，引入AOP（面向切片编程）作为对比，在程序运行的某个片段，执行代码处理你想要进行的操作。<a href="http://45.63.120.39/docs/concepts/middleware.html">slim文档</a>中对中间件的调用顺序用一个同心圆来描述。本节将展示中间件的定义与使用，并展示中间件调用的顺序。存在两种中间件添加方式，应用程序中间件和路由中间件，两者的区别，简单概述就是“应用程序中间件”被每个<em>传入（incoming）</em> HTTP 请求调用，也就是说每个请求都会调用该中间件；而路由中间件，*只有*在当前 HTTP 请求的方法和 URI 都与中间件所在路由相匹配时才会被调用，也就是说该中间件是为指定路由而添加，当然也能为路由组指定。</p>
+
+<p>详细定义与描述，可阅读<a href="http://45.63.120.39/docs/concepts/middleware.html">slim文档中对中间件的描述</a>，这里功利一点只描述在本修改后框架中如何使用。</p>
+
+<h4 id="中间件的定义与实现">中间件的定义与实现</h4>
+
+<p>中间件是一个接收三个参数的可回调（callable）对象，三个参数是：请求对象、响应对象以及下一层中间件。中间件<strong>必须</strong>返回一个 <code>\Psr\Http\Message\ResponseInterface</code> 的实例，</p>
+
+<ol>
+<li>闭包实现，</li>
+</ol>
+
+<pre><code class="language-php">   # 定义实例
+   function($request, $response, $next){
+       ...
+       $response = $next($request, $response);
+       ...
+       return $response;
+   }
+</code></pre>
+
+<ol>
+<li>可调用类__invoke()的实现</li>
+</ol>
+
+<pre><code class="language-php">   class ExampleMiddleware
+   {
+       public function __invoke($request, $response, $next)
+       {
+           ...
+           $response = $next($request, $response);
+           ...
+           return $response;
+       }
+   }
+</code></pre>
+
+<p>可见，这里的重点无论闭包实现还是__invoke()可调用类的实现，都需要这三个参数，又参照中间件的定义，在程序运行的某个点，执行处理代码——或者举个例子“用户权限验证”来说，在程序实例app执行代码之前，需要判断用户的身份，这就是那个点，因为肯定是先验证在执行操作，比如有个路由定义（只是举个例子）</p>
+
+<pre><code class="language-php">$app-&gt;post('/{user_name}/edit_password', 'user\manager\edit_password');
+</code></pre>
+
+<p>在修改用户密码之前，这个时刻，程序必须先验证用户的身份（如session，JWT等等），此时我们可以为此“操作”，添加一个中间件，而不是在控制器中编写此方面验证的代码。这也是一种解耦吧，让控制器的操作更加纯粹。另一方面，可以实现代码的抽象，比如假设有很多用户操作都需要验证权限，总不能每个控制器都复制那么一段权限验证的代码吧。</p>
+
+<p>然后，需要一个</p>
+
+<h4 id="中间件的调用与执行顺序">中间件的调用与执行顺序</h4>
+
+<p>本框架中一般使用__invoke()可调用类的方式。在App目录下新建Middleware文件夹，中间件类就存放在此。</p>
+
+<pre><code class="language-php"># SimpleMiddleware.php
+&lt;?php
+namespace App\Middleware;
+
+class SimpleMiddleware
+{
+    public function __invoke($request, $response, $next)
+    {
+        $response-&gt;getBody()-&gt;write(&quot;---Eample---&quot;);
+        $response = $next($request, $response);
+        return $response;
+    }
+}
+
+</code></pre>
+
+<p>在控制器中定义</p>
+
+<h3 id="action-控制器">Action 控制器</h3>
+
+<h3 id="model-模型类">Model 模型类</h3>
+
+<h2 id="在本框架中使用illuminate-database-laravel-数据库操作">在本框架中使用Illuminate Database （Laravel 数据库操作）</h2>
+
+<p><a href="http://45.63.120.39/docs/cookbook/database-eloquent.html">按照slim文档 - 在slim中使用Eloquent</a>，总感觉很奇怪，按我所理解的文档中使用Eloquent的步骤，</p>
+
+<ol>
+<li>编写db config</li>
+<li>容器中实例化<code>\Illuminate\Database\Capsule\Manager</code>，进行连接管理</li>
+</ol>
+
+<p>我所感到的奇怪就是下面的步骤（感谢<a href="https://github.com/Yven">陈先生</a>的指导）</p>
+
+<ol>
+<li>使用容器注册表模型</li>
+</ol>
+
+<p><img src="https://i.loli.net/2019/07/02/5d1b0f2c861e457094.png" alt="使用容器注册表模型" /></p>
+
+<ol>
+<li>把查询数据库的功能放到了controller里面</li>
+</ol>
+
+<p>这两步，个人理解就是在容器中，为每一个需要进行数据库curd操作的控制器进行注册，然后在controller中进行操作？这也太不MVC了吧，可能我是掉进了ThinkPHP的惯性思维里面？而在<a href="https://learnku.com/docs/laravel/5.8/eloquent/3931">laravel中Eloquent文档</a>的描述，模型定义的方式是使用<code>use Illuminate\Database\Eloquent\Model;</code>我觉得后者更直接点吧。</p>
+
+<h3 id="本框架中的实现步骤">本框架中的实现步骤</h3>
+
+<blockquote>
+<p>虽然感觉实现得有点丑陋</p>
+</blockquote>
+
+<h4 id="连接参数">连接参数</h4>
+
+<pre><code class="language-php">// 数据库配置
+'db' =&gt; [
+    'driver' =&gt; 'mysql',
+    'host' =&gt; '127.0.0.1',
+    'database' =&gt; 'test',
+    'username' =&gt; 'root',
+    'password' =&gt; '123456',
+    'charset' =&gt; 'utf8',
+    'collation' =&gt; 'utf8_unicode_ci',
+    'prefix' =&gt; '',
+],
+</code></pre>
+
+<h4 id="定义基类-core-model-php">定义基类 \Core\Model.php</h4>
+
+<p>该类的工作是：进行连接管理，又因为php单继承的原因，在本类中继承<code>Illuminate\Database\Eloquent\Model</code></p>
+
+<pre><code class="language-php">&lt;?php
+/**
+ * 模型类基类
+ */
+namespace Core;
+
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+
+class Model extends EloquentModel
+{
+    public function __construct()
+    {
+        $capsule = new \Illuminate\Database\Capsule\Manager;
+        // 获取配置，并进行建立连接
+        $capsule-&gt;addConnection(\Core\Config::get('settings')['db']);
+        $capsule-&gt;setAsGlobal();
+        $capsule-&gt;bootEloquent();
+    }
+}
+</code></pre>
+
+<h4 id="模型类定义">模型类定义</h4>
+
+<p>继承Model基类，定义需连接的数据表或其他（参见Eloquent文档）</p>
+
+<pre><code class="language-php"># test.php
+&lt;?php
+namespace App\Model;
+
+use Core\Model;
+
+class Test extends Model
+{
+    # 连接测试数据表
+    protected $table = 'country';   
+}
+</code></pre>
+
+<h4 id="控制器中使用">控制器中使用</h4>
+
+<pre><code class="language-php">$testModel = new TestModel();
+$res = $testModel-&gt;get();
+return $this-&gt;success(200, 'success', $res);
+</code></pre>
+
+<h4 id="结果-1">结果</h4>
+
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;msg&quot;: &quot;success&quot;,
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;中国&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;name&quot;: &quot;美国&quot;
+    },
+    {
+      &quot;id&quot;: 3,
+      &quot;name&quot;: &quot;法国&quot;
+    }
+  ]
+}
+</code></pre>
+
+<h4 id="题外话-一个小有意思的bug">题外话，一个小有意思的bug</h4>
+
+<p><img src="https://i.loli.net/2019/07/02/5d1b1444a956224527.jpeg" alt="aaa" /></p>
+
+<p>google一下，发现对这个问题<a href="https://github.com/laravel/framework/issues/3116">在gtithub的讨论</a>很有意思，这个问题大概是：缺失<code>&quot;doctrine/dbal&quot;: &quot;~2.3&quot;</code>依赖，而问题的产生是因为更新之后，<code>composer require illuminate/database</code>不再默认安装该依赖。</p>
+
+<p>问题解决：</p>
+
+<ol>
+<li>composer.json 添加 <code>&quot;doctrine/dbal&quot;: &quot;~2.3&quot;</code></li>
+<li>composer update</li>
+</ol>
+
+<p>而我觉得有意思的点在于，composer拯救依赖，而依赖的改动会引发很多问题。就如讨论而已，这个1.多M大小的依赖，是否应该提供默认包含。</p>
+
+<p>另外让我感受到，这个真实世界——离开ThinkPHP之后，一切都变得很奇怪与奇妙（褒义）。同时对ThinkPHP的感情，有点感激——在于真的易于上手，而又有点抱怨——在于仿佛被局限了，看不到很多很多东西。</p>
+
+<h2 id="基础使用">基础使用</h2>
 
 <h3 id="框架限制与未实行功能">框架限制与未实行功能</h3>
 
@@ -291,14 +635,21 @@ $app-&gt;run();
 
 <p>也因为单应用入口，故容器类，配置类，路由类，均为该应用实例服务（或许下一步应该按照其余框架一般，定义几个层次的配置文件实现）</p>
 
+<ol>
+<li>自定义\Core\Config 配置管理类，稍显多余，因为slim中已提供<a href="http://45.63.120.39/docs/objects/application.html">相关配置管理</a></li>
+</ol>
+
 <p>未实现功能：</p>
 
 <ol>
 <li>自定义错误处理</li>
 <li>log 日志记录</li>
+<li>phpunit单元测试实现</li>
 </ol>
 
 <h2 id="总结与参考">总结与参考</h2>
+
+<p><a href="https://www.golaravel.com/post/zai-laravelwai-du-li-shi-yong-eloquent/">在Laravel外独立使用Eloquent</a></p>
 
 	
 			

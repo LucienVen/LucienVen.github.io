@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    RabbitMQ基础使用 // Liangliangtoo&#39;s Blog
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="RabbitMQ基础使用以及学习笔记">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.38" />
+
+  <meta property="og:title" content="RabbitMQ基础使用" />
+<meta property="og:description" content="RabbitMQ基础使用以及学习笔记" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://lucienven.github.io/post/rabbitmq%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="https://lucienven.github.io//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Liangliangtoo&#39;s Blog" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+
+    <h1 class="brand-title">liangliang.too</h1>
+    <h2 class="brand-tagline">Don&#39;t Panic.</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="https://lucienven.github.io/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/post">Blog</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="/about">about</a></li>
+        
+      </ul>
+    </nav>
+
+    
+    <div class="social-buttons">
+      
+        
+        <a href="https://github.com/LucienVen" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#环境准备">环境准备</a>
+<ul>
+<li><a href="#rabbitmq安装">RabbitMQ安装</a></li>
+<li><a href="#php-amqplib组件安装">PHP amqplib组件安装</a></li>
+</ul></li>
+<li><a href="#rabbitmq">RabbitMQ</a></li>
+<li><a href="#一些术语与单词翻译">一些术语与单词翻译</a></li>
+<li><a href="#一般思路综述">一般思路综述</a></li>
+<li><a href="#part1-base-usage">part1: Base usage</a></li>
+<li><a href="#part2-work-queues">part2: Work Queues</a>
+<ul>
+<li><a href="#循环调度">循环调度</a></li>
+<li><a href="#消息确认">消息确认</a></li>
+</ul></li>
+<li><a href="#part3">part3:</a></li>
+<li><a href="#part4-routing">part4: routing</a></li>
+<li><a href="#part5-topic-exchange">part5: topic exchange</a></li>
+<li><a href="#part6-rpc">part6: RPC</a></li>
+<li><a href="#常见函数使用">常见函数使用</a></li>
+<li><a href="#常用命令">常用命令</a></li>
+<li><a href="#参考">参考</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/post/rabbitmq%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/">RabbitMQ基础使用</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>23</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jul</span> <span class="post-date-year">2019</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-rabbitmq" href="https://lucienven.github.io//categories/rabbitmq">RabbitMQ</a>
+				
+					<a class="post-category post-category-%E7%AC%94%E8%AE%B0" href="https://lucienven.github.io//categories/%E7%AC%94%E8%AE%B0">笔记</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            <p>简单地说，RabbitMQ是消息队列服务。对比Redis也提供List结构，也可以作为消息队列的实现。但是看过一些对比，貌似各位大佬还是更加支持使用RabbitMQ作为消息队列的实现。故我好奇，此处便来学习一下。</p>
+
+<p></p>
+
+<h2 id="前言">前言</h2>
+
+<p>简单地说，RabbitMQ是消息队列服务。对比Redis也提供List结构，也可以作为消息队列的实现。但是看过一些对比，貌似各位大佬还是更加支持使用RabbitMQ作为消息队列的实现。故我好奇，此处便来学习一下。</p>
+
+<p>此demo为学习 RabbitMQ 官网入门教程<a href="https://www.rabbitmq.com/tutorials/tutorial-one-php.html">RabbitMQ - RabbitMQ tutorial</a>笔记。因官网文档内容为英文，又在segmentfault 网站中看到大佬翻译的该官网入门教程的<a href="https://segmentfault.com/a/1190000011825148#articleHeader4">翻译版本</a>（虽然有点觉得也是机翻的xixixi），故两者结合观摩学习。</p>
+
+<p>具体步骤在两份文档中已经十分详细，本文就作为学习RabbitMQ过程中，对每一部分的内容做些总结。又实际上该6篇教程中的使用代码结构差异不大，所以本文对比6篇入门教程，对RabbitMQ使用的不同之处，做一些简单的对比与总结。十分推荐阅读<a href="https://www.zouyesheng.com/rabbitmq.html">RabbitMQ 使用参考 - 邹业盛</a>这位大佬的blog，和我这种目前半桶水都没有的相比hhhh，思路与概念讲述十分清晰。</p>
+
+<h2 id="环境准备">环境准备</h2>
+
+<h3 id="rabbitmq安装">RabbitMQ安装</h3>
+
+<p>详细见于：RabbitMQ官网<a href="https://www.rabbitmq.com/download.html">https://www.rabbitmq.com/download.html</a></p>
+
+<h3 id="php-amqplib组件安装">PHP amqplib组件安装</h3>
+
+<p>通过composer，安装 PHP amqplib组件</p>
+
+<pre><code class="language-php">composer require php-amqplib/php-amqplib
+</code></pre>
+
+<p>本demo中，通过 requrie_once 引入使用。</p>
+
+<h2 id="rabbitmq">RabbitMQ</h2>
+
+<p><strong>RabbitMQ</strong>是实现了<a href="https://www.wikiwand.com/zh-hans/%E9%AB%98%E7%BA%A7%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%8D%8F%E8%AE%AE">高级消息队列协议</a>（AMQP）的开源消息代理（英语：<a href="https://www.wikiwand.com/en/Message_broker">Message broker</a>）软件（亦称面向消息的中间件（英语：<a href="https://www.wikiwand.com/en/Message-oriented_middleware">Message-oriented middleware</a>））。——<a href="https://www.wikiwand.com/zh-hans/RabbitMQ">维基百科 - RabbitMQ词条</a></p>
+
+<p>RabbitMQ默认服务监听在 5672 端口上。</p>
+
+<p>通常队列服务都会有三个概念：</p>
+
+<ul>
+<li>工作者（发消息者）</li>
+<li>队列</li>
+<li>消费者（收消息者）</li>
+</ul>
+
+<p><strong>流程上，工作者把消息放上队列中，然后消费者从队列中取出消息。</strong></p>
+
+<blockquote>
+<p>RabbitMQ 在这个基本概念之上, 多做了一层抽象, 在 <em>发消息者</em> 和 <em>队列</em> 之间, 加入了 <em>交换器</em>(Exchange) . 这样 <em>发消息者</em> 和 <em>队列</em> 就没有直接联系, 转而变成 <em>发消息者</em> 把消息给 <em>交换器</em> , <em>交换器</em> 根据调度策略再把消息再给 <em>队列</em> 。</p>
+
+<p>当然, 多一层抽象会增加复杂度, 但是同时, 功能上也更灵活. 事实上, 很多时候面对具体场景时, 在这种&rdquo;四段式&rdquo;的结构下, 你可选择的方案不止一种的. 不过也不必过于担心, 在一些自我规定的&rdquo;原则&rdquo;之下, &ldquo;正确&rdquo;的方案也不会那么纠结.</p>
+
+<p>总结一下 <code>4 + 1</code> 个概念, 或者说, 五种角色:</p>
+
+<ul>
+<li><em>Producing</em> , 生产者, 产生消息的角色.</li>
+<li><em>Exchange</em> , 交换器, 在得到生产者的消息后, 把消息扔到队列的角色.</li>
+<li><em>Queue</em> , 队列, 消息暂时呆的地方.</li>
+<li><em>Consuming</em> , 消费者, 把消息从队列中取出的角色.</li>
+<li><em>消息 Message</em> , RabbitMQ 中的消息有自己的一系列属性, 某些属性对信息流有直接影响.</li>
+</ul>
+
+<p>——摘抄自<a href="https://www.zouyesheng.com/rabbitmq.html">RabbitMQ 使用参考 - 邹业盛</a></p>
+</blockquote>
+
+<p>RabbitMQ官方教程文档代码文件见于：<a href="https://github.com/rabbitmq/rabbitmq-tutorials/tree/master/php">https://github.com/rabbitmq/rabbitmq-tutorials/tree/master/php</a>。本人也记录一份于本人Github：<a href="https://github.com/LucienVen/php_demo/tree/master/rabbitmq_demo">https://github.com/LucienVen/php_demo/tree/master/rabbitmq_demo</a></p>
+
+<h2 id="一些术语与单词翻译">一些术语与单词翻译</h2>
+
+<p>名词</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">名词</th>
+<th align="center">解释</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">生成者</td>
+<td align="center">发送信息的程序</td>
+<td></td>
+</tr>
+
+<tr>
+<td align="center">消费者</td>
+<td align="center">等待消息然后处理的程序</td>
+<td></td>
+</tr>
+
+<tr>
+<td align="center">队列</td>
+<td align="center"></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="center">管道</td>
+<td align="center"></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>单词翻译</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">单词</th>
+<th align="center">翻译</th>
+<th align="center">备注（记录出处）</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">declare</td>
+<td align="center">声明</td>
+<td align="center">queue_declare, 队列声明的意思</td>
+</tr>
+
+<tr>
+<td align="center">publish</td>
+<td align="center">发布</td>
+<td align="center">basic_publish，见于生产者程序</td>
+</tr>
+
+<tr>
+<td align="center">channel</td>
+<td align="center">渠道，管道，频道</td>
+<td align="center">常见于”频道“意思</td>
+</tr>
+
+<tr>
+<td align="center">consume</td>
+<td align="center">消耗，消费</td>
+<td align="center">basic_consume，理解为消费的意思，对应basic_publish，见于消费者程序</td>
+</tr>
+
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="一般思路综述">一般思路综述</h2>
+
+<p>tutorial part1至part5的代码的结构差不多，按照个人的理解：</p>
+
+<p>生产者：</p>
+
+<ol>
+<li>建立连接 new AMQPStreamConnection</li>
+<li>从连接获取一个channel，<code>$channel = $connection-&gt;channel()</code></li>
+<li>设置队列queue / 交换机exchange，<code>$channel-&gt;queue_declare() 或 exchange_declare()</code></li>
+<li>定义message接口，<code>$msg = new AMQPMessage</code></li>
+<li>频道channel发布 basic_publish，<code>$channel-&gt;queue_declare()</code></li>
+<li>关闭channel和connection</li>
+</ol>
+
+<p>消费者：</p>
+
+<ol>
+<li>建立连接 new AMQPStreamConnection</li>
+<li>从连接获取channel</li>
+<li>定义回调函数</li>
+<li>声明需要的queue，<code>$channel-&gt;basic_consume()</code></li>
+<li>开始接受信息</li>
+</ol>
+
+<p>注：</p>
+
+<ul>
+<li>声明exchange与声明queue并不冲突，前面几篇教程为了简洁才不同时定义两者。</li>
+</ul>
+
+<h2 id="part1-base-usage">part1: Base usage</h2>
+
+<p><strong>RabbitMQ的基础使用，了解如何构建一个简单的工作队列。</strong></p>
+
+<p>运行<code>php send.php</code>生产者程序脚本，会向名为前面声明的队列（假设为queue_name）发送信息。多次运行，会发送多条信息，若此时没有运行消费者程序（receive.php），消息会存在于队列中，待到消费者程序脚本运行时，一并提取。</p>
+
+<p>运行<code>php receive.php</code>消费者程序脚本，会从声明为queue_name的队列中获取信息。终端运行 rabbitmqctl list_queues 命令，可列出队列。</p>
+
+<p>如若未运行消费者程序（receive.php），而运行生成者程序两次，此时列出的队列名以及消息条数分别为：name =&gt; queue_name，message =&gt; 2。此时在运行消费者程序，则可见终端打印出两条message，再次运行rabbitmqctl list_queues 命令，可见name =&gt; queue_name，message =&gt; 0</p>
+
+<h2 id="part2-work-queues">part2: Work Queues</h2>
+
+<blockquote>
+<p>工作队列（又名任务队列）背后的主要思想是避免立即执行资源密集型任务，必须等待它完成。相反，我们计划稍后完成任务。我们将任务封装为消息并将其发送到队列中。后台运行的一个工作进程将弹出任务并最终执行该任务。当你运行许多工人（消费者）时，任务将在他们之间分担。</p>
+</blockquote>
+
+<p>part2 Demo允许任意的消息是从命令行发送。这一计划将任务分配给我们的工作队列。进行单worker简单运行，结果同part1。</p>
+
+<h3 id="循环调度">循环调度</h3>
+
+<p>使用任务队列的一个优点是容易拥有并行工作的能力。如果我们积压了大量的工作，可以增加更多的worker。尝试同时运行两个worker.php脚本，然后继续使用<code>php new_task.php 'new message'</code>发送消息，可见每个worker程序依次打印出new_task发送的消息。默认情况下，RabbitMQ将会发送的每一条消息给下一个消费者，在序列。平均每个消费者将得到相同数量的消息。这种分发消息的方式称为<strong>循环轮询</strong>。试着用三个或更多的工人进行尝试。</p>
+
+<h3 id="消息确认">消息确认</h3>
+
+<p>概念略。</p>
+
+<p>通过设置basic_consume第四个参数为false，（basic_consume函数参见下文 *常见函数使用*），可知basic_consume第四个参数<code>bool $no_ack = false</code>，默认为false，默认消息确定。</p>
+
+<h2 id="part3">part3:</h2>
+
+<p>待续</p>
+
+<h2 id="part4-routing">part4: routing</h2>
+
+<p>待续</p>
+
+<h2 id="part5-topic-exchange">part5: topic exchange</h2>
+
+<p>待续</p>
+
+<h2 id="part6-rpc">part6: RPC</h2>
+
+<p>待续</p>
+
+<h2 id="常见函数使用">常见函数使用</h2>
+
+<ul>
+<li>rabbitmqctl list_queues 列出队列</li>
+</ul>
+
+<p>Timeout: 60.0 seconds &hellip;
+   Listing queues for vhost / &hellip;</p>
+
+<p>| name 队列名 | message 现存消息条数 |      |
+   | &mdash;&mdash;&mdash;&ndash; | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash; | &mdash;- |
+   | demo        | 2                    |      |
+   |             |                      |      |
+   |             |                      |      |</p>
+
+<ul>
+<li>queue_declare</li>
+</ul>
+
+<pre><code class="language-php">   queue_declare(
+       string $queue = '', 			# 队列名称
+       bool $passive = false, 
+       bool $durable = false, 			# 持久化
+       bool $exclusive = false, 
+       bool $auto_delete = true, 
+       bool $nowait = false, 
+       array $arguments = array(), 
+       int $ticket = null
+   )
+</code></pre>
+
+<ul>
+<li><p>exchange_declare</p></li>
+
+<li><p>定义 AMQP 信息体</p></li>
+</ul>
+
+<pre><code class="language-php">   use PhpAmqpLib\Message\AMQPMessage;
+   $msg = new AMQPMessage('message body');
+</code></pre>
+
+<ul>
+<li>basic_publish</li>
+</ul>
+
+<pre><code class="language-php">   // Publishes a message
+   $channel-&gt;basic_publish(
+       \PhpAmqpLib\Message\AMQPMessage $msg, 
+       string $exchange = '', 
+       string $routing_key = '', 
+       bool $mandatory = false, 
+       bool $immediate = false, 
+       int $ticket = null
+   );
+</code></pre>
+
+<ul>
+<li>base_consume</li>
+</ul>
+
+<pre><code class="language-php">   base_consume(
+       string $queue = '', 
+       string $consumer_tag = '', 
+       bool $no_local = false, 
+       bool $no_ack = false, 			# 消息确认
+       bool $exclusive = false, 
+       bool $nowait = false, 
+       callable|null $callback = null, 
+       int|null $ticket = null, 
+       array $arguments = array()
+   )
+</code></pre>
+
+<ul>
+<li>new AMQPMessage()</li>
+</ul>
+
+<pre><code class="language-php">    new AMQPMessage(string $body = '', array $properties = array())
+   
+</code></pre>
+
+<h2 id="常用命令">常用命令</h2>
+
+<ul>
+<li>rabbitmqctl list_bindings</li>
+</ul>
+
+<p>输出：Listing bindings for vhost /&hellip;</p>
+
+<table>
+<thead>
+<tr>
+<th>source_name</th>
+<th>source_kind</th>
+<th>destination_name</th>
+<th>destination_kind</th>
+<th>routing_key</th>
+<th>arguments</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>exchange</td>
+<td>demo</td>
+<td>queue</td>
+<td>demo</td>
+<td>[]</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>rabbitmqctl list_queues 列出队列</li>
+</ul>
+
+<p>Timeout: 60.0 seconds &hellip;
+   Listing queues for vhost / &hellip;</p>
+
+<p>| name 队列名 | message 现存消息条数 |      |
+   | :&mdash;&mdash;&mdash;: | :&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;: | &mdash;- |
+   |    demo     |          2           |      |
+   |             |                      |      |
+   |             |                      |      |</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://www.rabbitmq.com/tutorials/tutorial-one-php.html">RabbitMQ - RabbitMQ tutorial</a></li>
+<li><a href="https://segmentfault.com/a/1190000011825148#articleHeader4">RabbitMQ - RabbitMQ tutorial - 翻译版本 - segmentfault</a></li>
+<li><a href="https://www.zouyesheng.com/rabbitmq.html">RabbitMQ 使用参考 - 邹业盛</a></li>
+<li><a href="https://github.com/rabbitmq/rabbitmq-tutorials/tree/master/php">RabbitMQ - RabbitMQ tutorial - 完整代码</a></li>
+</ul>
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-php" href="https://lucienven.github.io//tags/php">PHP</a>,
+	                
+	                <a class="post-tag post-tag-rabbitmq" href="https://lucienven.github.io//tags/rabbitmq">RabbitMQ</a>,
+	                
+	                <a class="post-tag post-tag-%E7%AC%94%E8%AE%B0" href="https://lucienven.github.io//tags/%E7%AC%94%E8%AE%B0">笔记</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/post/%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E5%9F%BA%E4%BA%8Eslim%E7%9A%84mvc%E6%A1%86%E6%9E%B6/">开发一个基于slim的mvc框架</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2019. All rights reserved.</p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

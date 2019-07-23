@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Liangliangtoo&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 27 Jun 2019 15:59:38 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jul 2019 23:27:02 +0800</lastBuildDate>
     
 	<atom:link href="https://lucienven.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>RabbitMQ基础使用</title>
+      <link>https://lucienven.github.io/post/rabbitmq%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Tue, 23 Jul 2019 23:27:02 +0800</pubDate>
+      
+      <guid>https://lucienven.github.io/post/rabbitmq%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;简单地说，RabbitMQ是消息队列服务。对比Redis也提供List结构，也可以作为消息队列的实现。但是看过一些对比，貌似各位大佬还是更加支持使用RabbitMQ作为消息队列的实现。故我好奇，此处便来学习一下。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>开发一个基于slim的mvc框架</title>
